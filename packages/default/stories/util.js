@@ -46,7 +46,7 @@ export async function getTopStoryUrls() {
 export async function getTopStories() {
   // we want to process the HTML of each top story link, building an array of story objects in the process
   const urls = await getTopStoryUrls();
-  return await Promise.all(
+  const stories = await Promise.all(
     urls.map(async (url) => {
       // fetch HTML for this url
       const $ = await getHTMLFromUrl(url);
@@ -67,6 +67,14 @@ export async function getTopStories() {
       };
     })
   );
+
+  // add a "storyId" field to each item in the array
+  return stories.map((story, index) => {
+    return {
+      storyId: index + 1,
+      ...story,
+    };
+  });
 }
 
 export default {
