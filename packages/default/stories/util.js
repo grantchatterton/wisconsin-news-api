@@ -5,7 +5,7 @@ import * as cheerio from "cheerio";
 const NEWS_URL = "https://www.channel3000.com/news/local-news";
 
 // Create an instance to use for Axios
-// We do this to circumvent the 429 - Too Many Requests response
+// We do this to add a "User-Agent" header to circumvent the "429 - Too Many Requests" response
 const instance = axios.create({
   headers: {
     "User-Agent":
