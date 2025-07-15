@@ -1,17 +1,9 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+import UserAgent from "user-agents";
 
 // URL for retrieving the top news stories
 const NEWS_URL = "https://www.channel3000.com/news/local-news";
-
-// Create an instance to use for Axios
-// We do this to add a "User-Agent" header to circumvent the "429 - Too Many Requests" response
-const instance = axios.create({
-  headers: {
-    "User-Agent":
-      "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0",
-  },
-});
 
 /**
  * Fetches the HTML of a given web-page and returns a CheerioAPI object representing it.
@@ -20,7 +12,13 @@ const instance = axios.create({
  * @returns       CheerioAPI object for parsing the HTML.
  */
 export async function getHTMLFromUrl(url) {
-  const response = await instance.get(url);
+  const userAgent = new UserAgent();
+  const response = await axios.get(url, {
+    headers: {
+      "User-Agent": userAgent.toString(),
+    },
+  });
+
   return cheerio.load(response.data);
 }
 
@@ -33,7 +31,10 @@ export async function getTopStoryUrls() {
   const $ = await getHTMLFromUrl(NEWS_URL);
   return $(".list-popular .tnt-asset-link")
     .map(function () {
-      return `${NEWS_URL}${$(this).attr("href")}`;
+      return {
+        url: `${NEWS_URL}${$(this).attr("href")}`,
+        title: $(this).text().trim(),
+      };
     })
     .toArray();
 }
@@ -47,32 +48,40 @@ export async function getTopStories() {
   // we want to process the HTML of each top story link, building an array of story objects in the process
   const urls = await getTopStoryUrls();
   const stories = await Promise.all(
-    urls.map(async (url) => {
-      // fetch HTML for this url
-      const $ = await getHTMLFromUrl(url);
+    urls.map(async (data) => {
+      // try to fetch HTML for this url
+      try {
+        const $ = await getHTMLFromUrl(data.url);
+        // fetch various properties of the article
+        const title = $(".headline").text().trim();
+        const description =
+          $(".subhead").text().trim() ||
+          $("#article-body > p").first().text().trim();
+        const image =
+          $(".asset-photo img").attr("src") ||
+          "https://m.media-amazon.com/images/I/91ziU2NUHzL.png";
+        return {
+          title,
+          description,
+          url: data.url,
+          image,
+        };
+      } catch (error) {
+        console.error(error);
 
-      // fetch various properties of the article
-      const title = $(".headline").text().trim();
-      const description =
-        $(".subhead").text().trim() ||
-        $("#article-body > p").first().text().trim();
-      const image =
-        $(".asset-photo img").attr("src") ||
-        "https://m.media-amazon.com/images/I/91ziU2NUHzL.png";
-      return {
-        title,
-        description,
-        url,
-        image,
-      };
+        // fall back to just using the data object (containing just the url and title)
+        return {
+          ...data,
+        };
+      }
     })
   );
 
   // add a "storyId" field to each item in the array
   return stories.map((story, index) => {
     return {
-      storyId: index + 1,
       ...story,
+      storyId: index + 1,
     };
   });
 }
