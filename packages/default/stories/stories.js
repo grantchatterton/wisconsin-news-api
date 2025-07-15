@@ -9,16 +9,27 @@ export async function main(event) {
         Allow: "GET",
       },
       statusCode: 405,
-      body: "Method Not Allowed",
+      body: {
+        error: "Method Not Allowed",
+      },
     };
   }
 
-  // Fetch the stories, and send them with the response body
-  const stories = await getTopStories();
-  return {
-    headers: {
-      "Cache-Control": "public, max-age=3600",
-    },
-    body: stories,
-  };
+  try {
+    const stories = await getTopStories();
+    return {
+      headers: {
+        "Cache-Control": "public, max-age=3600",
+      },
+      body: stories,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      statusCode: 500,
+      body: {
+        error: "Failure fetching stories!",
+      },
+    };
+  }
 }
