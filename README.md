@@ -7,7 +7,8 @@ Demo: https://faas-nyc1-2ef2e6cc.doserverless.co/api/v1/web/fn-b9c5bbcf-e873-464
 
 ### Fetching Stories
 #### GET /stories
-Returns a list of the top five stories of the current day in JSON format.<br/>
+Returns a list of the top five stories of the current day in JSON format.
+<br/>
 A successful response (Status Code: ```200 - OK```) will look something like this:
 ```
 [
