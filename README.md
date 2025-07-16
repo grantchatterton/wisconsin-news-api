@@ -11,19 +11,19 @@ Returns a list of the top five stories of the current day in JSON format.<br/>
 A successful response (Status Code: ```200 - OK```) will look something like this:
 ```
 [
-{
-  "description": "Story description.",
-  "image": "Story #1 image URL",
-  "storyId": 1,
-  "title": "Story #1 Title",
-  "url": "Story #1 URL"
-},
-{
-  "storyId": 2,
-  "title": "Story #2 Title",
-  "url": "Story #2 URL"
-},
-...3 more story objects
+  {
+    "description": "Story description.",
+    "image": "Story #1 image URL",
+    "storyId": 1,
+    "title": "Story #1 Title",
+    "url": "Story #1 URL"
+  },
+  {
+    "storyId": 2,
+    "title": "Story #2 Title",
+    "url": "Story #2 URL"
+  },
+  ...3 more story objects
 ]
 ```
 Note: Some stories may or may not have additional fields such as for an ```image``` or ```description```. I am currently working on a solution to this. It is primarily due to the fact that scraping the data from each individual article sometimes results in a ```429 - Too Many Requests``` error, which only allows me to include basic information in a given story entry in the response data (such as the ```title``` and ```url``` fields).
