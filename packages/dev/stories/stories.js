@@ -30,3 +30,5 @@ export async function main(event) {
     };
   }
 }
+
+global.main = main;
