@@ -14,5 +14,10 @@
     "axios": "^1.10.0",
     "cheerio": "^1.1.2",
     "user-agents": "^1.1.608"
+  },
+  "devDependencies": {
+    "rollup": "^4.45.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
   }
 }
