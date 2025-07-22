@@ -8,5 +8,8 @@
     "axios": "^1.10.0",
     "cheerio": "^1.1.2",
     "user-agents": "^1.1.608"
+  },
+  "devDependencies": {
+    "webpack-cli": "^6.0.1"
   }
 }
