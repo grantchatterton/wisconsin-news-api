@@ -26,4 +26,4 @@ A successful response (Status Code: ```200 - OK```) will look something like thi
   ...3 more story objects
 ]
 ```
-Note: Some stories may or may not have additional fields such as for an ```image``` or ```description```. I am currently working on a solution to this. It is primarily due to the fact that scraping the data from each individual article sometimes results in a ```429 - Too Many Requests``` error, which only allows me to include basic information in a given story entry in the response data (such as the ```title``` and ```url``` fields).
+Note: Some stories may or may not have additional fields such as for an ```image``` or ```description```. I am currently working on a solution to this. It is primarily due to the fact that scraping the data from each individual article sometimes results in a ```429 - Too Many Requests``` error, which only allows me to include basic information in a given story entry in the response data (such as the ```id```, ```title``` and ```url``` fields).
