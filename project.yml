@@ -4,7 +4,7 @@ packages:
       - name: stories
         runtime: nodejs:18
         web: true
-  - name: v2
+  - name: dev
     functions:
       - name: stories
         runtime: nodejs:18
