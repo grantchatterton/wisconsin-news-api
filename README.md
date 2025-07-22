@@ -14,12 +14,12 @@ A successful response (Status Code: ```200 - OK```) will look something like thi
   {
     "description": "Story description.",
     "image": "Story #1 image URL",
-    "storyId": 1,
+    "id": 1,
     "title": "Story #1 Title",
     "url": "Story #1 URL"
   },
   {
-    "storyId": 2,
+    "id": 2,
     "title": "Story #2 Title",
     "url": "Story #2 URL"
   },
