@@ -1,5 +1,5 @@
 packages:
-  - name: v1
+  - name: public
     functions:
       - name: stories
         runtime: nodejs:18
