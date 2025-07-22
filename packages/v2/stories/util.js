@@ -31,37 +31,47 @@ export async function getHTMLFromUrl(url) {
 export async function getTopStories(basic = false) {
   // we want to process the HTML of each top story link, building an array of story objects in the process
   const $ = await getHTMLFromUrl(NEWS_URL);
-  return $(".list-popular .tnt-asset-link")
-    .map(async function () {
-      const data = {
-        url: `${NEWS_URL}${$(this).attr("href")}`,
-        title: $(this).text().trim(),
-      };
-
-      if (basic) {
-        return data;
-      }
-
-      try {
-        const $story = await getHTMLFromUrl(data.url);
-
-        // return a more extensive object containing various properties of the article
-        return {
-          url: data.url,
-          title: $story(".headline").text().trim(),
-          description:
-            $story(".subhead").text().trim() ||
-            $story("#article-body > p").first().text().trim(),
-          image: $story(".asset-photo img").attr("src"),
+  const stories = await Promise.all(
+    $(".list-popular .tnt-asset-link")
+      .map(async function () {
+        const data = {
+          url: `${NEWS_URL}${$(this).attr("href")}`,
+          title: $(this).text().trim(),
         };
-      } catch (error) {
-        console.error(error);
 
-        // fall back to just using the data object we created earlier
-        return data;
-      }
-    })
-    .toArray();
+        if (basic) {
+          return data;
+        }
+
+        try {
+          const $story = await getHTMLFromUrl(data.url);
+
+          // return a more extensive object containing various properties of the article
+          return {
+            description:
+              $story(".subhead").text().trim() ||
+              $story("#article-body > p").first().text().trim(),
+            image: $story(".asset-photo img").attr("src"),
+            title: $story(".headline").text().trim() || data.title,
+            url: data.url,
+          };
+        } catch (error) {
+          console.error(error);
+
+          // fall back to just using the data object we created earlier
+          return data;
+        }
+      })
+      .toArray()
+  );
+
+  // add a unique id field to each story
+  return stories.map((story, index) => {
+    return {
+      ...story,
+      id: index + 1,
+    };
+  });
 }
 
 export default {
