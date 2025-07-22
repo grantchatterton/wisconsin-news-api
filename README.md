@@ -13,8 +13,8 @@ A successful response (Status Code: ```200 - OK```) will look something like thi
 [
   {
     "description": "Story description.",
-    "image": "Story #1 image URL",
     "id": 1,
+    "image": "Story #1 image URL",
     "title": "Story #1 Title",
     "url": "Story #1 URL"
   },
